@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!--Metadescription in base.html-->
+{% block metadescription %}
+    {% if category %}
+        {{ category.category_desc|truncatewords:155 }}
+    {% else %}
+        Welcome to A ONLINE SHOPPING Store where you can buy different products !!!
+    {% endif %}
+{% endblock %}
+
+
+<!--title in base html-->
+{% block title %}
+    {% if category %}
+        {{ category.category_name }} - A ONLINE SHOPPING
+    {% else %}
+         See our new collections !!!
+    {% endif %}
+{% endblock %}
+
+<!--block content in base html-->
+{% block content %}
+    {% if category %}
+        <div>
+            <div class="row my_row">
+                <div class="mx-auto">
+                    <p>
+                        <a href="{% url 'ecommerce_app:allProductCat' %}">Our Product Collections</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <div class="mx-auto">
+        {% if category %}
+            <img  class= "my_image" src="{{category.category_img.url}}" alt="{{category.category_name}}">
+    </div>
+    <br>
+    <div>
+        <h1 class="text-center my_title"><b>{{category.category_name}}</b></h1>
+        <p class="text-justify">{{category.category_desc}}</p>
+    </div>
+        {% else %}
+            <div>
+                <img class="my_image my_image_padding" src="{% static 'img/banner.png' %}" alt="Our products" width="1920px" height="600px">
+            </div>
+            <br>
+            <h1 class="text-center my_title">Our Product Collections</h1>
+            <p class="test-justify">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32. The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.</p>
+        {% endif %}
+        <div class="container">
+            <div class="row mx_auto">
+                {% for product in products.object_list %}
+                    <div class="my_bottom_margin col-9 col-sm-4 col-md-4 xol-lg-4">
+                        <div class="card text-center" style="min-width:18rem;">
+                            <a href="{{product.get_url}}"><img class="card-img-top my_image" src="{{product.product_img.url}}" alt="{{product.product_name}}"></a>
+                            <div class="card-body">
+                                <h3>{{product.product_name}}</h3>
+                                <p>{{product.product_price}}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="mx-auto">
+                {% if products.paginator.num_pages > 1 %}
+
+               {% endif %} <hr>
+                <div class="text-center">
+                    {% for pg in products.paginator.page_range %}
+                        <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+{% endblock %}
